@@ -17,6 +17,19 @@ const weatherColorMap = {
   'snow': '#aae1fc'
 }
 
+const UNPROMPTED = 0
+const UNAUTHORIZED = 1
+const AUTHORIZED = 2
+
+const UNPROMPTED_TIPS = "点击获取当前位置"
+const UNAUTHORIZED_TIPS = "点击开启位置权限"
+const AUTHORIZED_TIPS = ""
+
+const QQMapWX = require('../../libs/qqmap-wx-jssdk.min.js')
+var qqmapsdk = new QQMapWX({
+  key: 'C2QBZ-H7TK2-5TIUP-CWVAL-NMQVJ-3IF5Q'
+})
+
 Page({
 
   /**
@@ -27,8 +40,11 @@ Page({
     nowWeather: '',
     nowWeatherBackground: '',
     hourlyWeather: [],
-    todayTemp:'',
-    todayDate:''
+    todayTemp: '',
+    todayDate: '',
+    city: '',
+    locationTipsText: UNPROMPTED_TIPS,
+    locationAuthType: UNPROMPTED
   },
 
   /**
@@ -37,14 +53,15 @@ Page({
 
 
   onLoad: function(options) {
+
     this.getNow()
   },
 
-  setToday(result){
-    let date=new Date()
+  setToday(result) {
+    let date = new Date()
     this.setData({
-      todayTemp:`${result.today.minTemp}° - ${result.today.maxTemp}°`,
-      todayDate:`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} 今天`
+      todayTemp: `${result.today.minTemp}° - ${result.today.maxTemp}°`,
+      todayDate: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} 今天`
     })
 
 
@@ -86,7 +103,7 @@ Page({
     wx.request({
       url: 'https://test-miniprogram.com/api/weather/now', //仅为示例，并非真实的接口地址
       data: {
-        city: '广州市'
+        city: myThis.data.city
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -105,7 +122,46 @@ Page({
     })
   },
 
-  
+  onTapLocation() {
+    if (this.data.locationAuthType === UNAUTHORIZED) {} else {
+      this.getLocation()
+    }
+  },
+
+  getLocation() {
+    var myThis = this
+    wx.getLocation({
+      success: function(res) {
+        myThis.setData({
+          locationAuthType: AUTHORIZED,
+          locationTipsText: AUTHORIZED_TIPS
+        })
+        qqmapsdk.reverseGeocoder({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude
+          },
+          success: function(res) {
+            myThis.setData({
+              city: res.result.address_component.city,
+              locationTipsText: ''
+            })
+            myThis.getNow()
+          },
+          fail: function(res) {},
+          complete: function(res) {
+            // console.log(res);
+          }
+        });
+      },
+      fail: function() {
+        myThis.setData({
+          locationAuthType: UNAUTHORIZED,
+          locationTipsText: UNAUTHORIZED_TIPS
+        })
+      }
+    })
+  },
 
   /**
    * Lifecycle function--Called when page is initially rendered
@@ -118,7 +174,19 @@ Page({
    * Lifecycle function--Called when page show
    */
   onShow: function() {
-
+    wx.getSetting({
+      success: res => {
+        let auth = res.authSetting['scope.userLocation']
+        console.log(auth)
+        if (auth && this.data.locationAuthType !== AUTHORIZED) {
+          this.setData({
+            locationAuthType: AUTHORIZED,
+            locationTipsText: AUTHORIZED_TIPS
+          })
+          this.getLocation()
+        }
+      }
+    })
   },
 
   /**
@@ -157,12 +225,12 @@ Page({
   onShareAppMessage: function() {
 
   },
-  onTapDayWeather(){
+  onTapDayWeather() {
     wx.showToast({
       title: 'hello',
     })
     wx.navigateTo({
-      url: '../list/list',
+      url: '../list/list?city=' + this.data.city,
     })
   }
 })
