@@ -53,7 +53,7 @@ Page({
 
 
   onLoad: function(options) {
-
+    console.log('onLoad')
     this.getNow()
   },
 
@@ -167,6 +167,7 @@ Page({
    * Lifecycle function--Called when page is initially rendered
    */
   onReady: function() {
+    console.log('onReady')
 
   },
 
@@ -177,7 +178,6 @@ Page({
     wx.getSetting({
       success: res => {
         let auth = res.authSetting['scope.userLocation']
-        console.log(auth)
         if (auth && this.data.locationAuthType !== AUTHORIZED) {
           this.setData({
             locationAuthType: AUTHORIZED,
