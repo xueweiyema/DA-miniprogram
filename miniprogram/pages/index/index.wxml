@@ -40,10 +40,17 @@
     </navigator>
   </view>
 
-    <!-- 新page -->
+  <!-- 新page -->
     <view class="uploader">
       <navigator url="../newPage/newPage" open-type="navigate" class="uploader-text">
       <text>新page</text>
+    </navigator>
+  </view>
+
+  <!-- DA page -->
+    <view class="uploader">
+      <navigator url="../DA/dutyCalendar" open-type="navigate" class="uploader-text">
+      <text>DA</text>
     </navigator>
   </view>
 

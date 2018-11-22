@@ -9,7 +9,8 @@
     "pages/deployFunctions/deployFunctions",
     "pages/chooseLib/chooseLib",
     "pages/newPage/newPage",
-    "pages/list/list"
+    "pages/list/list",
+    "pages/DA/dutyCalendar"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

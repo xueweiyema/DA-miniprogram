@@ -34,13 +34,13 @@
 				{
 					"id": -1,
 					"name": "db guide",
-					"pathName": "pages/databaseGuide/databaseGuide",
+					"pathName": "pages/DA/dutyCalendar",
 					"query": ""
 				},
 				{
 					"id": -1,
 					"name": "dev start on second pages",
-					"pathName": "pages/newPage/newPage"
+					"pathName": "pages/DA/dutyCalendar"
 				}
 			]
 		}
