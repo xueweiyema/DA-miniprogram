@@ -8,7 +8,7 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"appid": "wxa431ba42adc689fb",
+	"appid": "",
 	"projectname": "DA_miniprogram",
 	"libVersion": "2.2.5",
 	"compileType": "miniprogram",
@@ -29,12 +29,12 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 0,
 			"list": [
 				{
 					"id": -1,
 					"name": "db guide",
-					"pathName": "pages/DA/dutyCalendar",
+					"pathName": "pages/index/index",
 					"query": ""
 				},
 				{
